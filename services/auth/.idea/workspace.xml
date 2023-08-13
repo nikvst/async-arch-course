@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e84f1b6d-9a80-478d-ae62-2fbffb245f09" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/auth-service.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/.python-version" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/alembic.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/api/healthchecks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/api/token.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/api/users.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/constants.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/repositories.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/schemas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/use_cases/_base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/use_cases/kafka.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/use_cases/token.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/use_cases/users.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/app/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/docker-compose.dev.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/migrations/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/migrations/env.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/migrations/script.py.mako" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/migrations/versions/b6e9e557a3e2_add_users.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/poetry.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../auth-service/pyproject.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../task-tracker/app/api/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2TlQKDPP7oIuo4AwubPoViEdhYv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/nikvst/projects/async-arch-course/services/auth&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/models" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="run" type="Python.FastAPI">
+      <option name="appName" value="app" />
+      <option name="file" value="$PROJECT_DIR$/app/main.py" />
+      <module name="auth" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="APP_CONFIG_FILE" value="local" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/Library/Caches/pypoetry/virtualenvs/auth-XkIj4JXB-py3.10/bin/python" />
+      <option name="SDK_NAME" value="Poetry (auth)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e84f1b6d-9a80-478d-ae62-2fbffb245f09" name="Changes" comment="" />
+      <created>1691615122203</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691615122203</updated>
+      <workItem from="1691615123344" duration="35383000" />
+      <workItem from="1691741621013" duration="14785000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/auth$run.coverage" NAME="run Coverage Results" MODIFIED="1691698311740" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>
