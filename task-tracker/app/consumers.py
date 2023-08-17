@@ -27,7 +27,10 @@ EVENT_HANDLERS = {
 async def handle_message(msg):
     logger.info(f"Received new message from topic {msg.topic}: {msg}")
 
-    if msg.topic == settings.USERS_STREAM_NAME:
+    if msg.topic in (
+        settings.USERS_STREAM_TOPIC_NAME,
+        settings.USERS_ROLE_CHANGED_TOPIC_NAME,
+    ):
         json_data = json.loads(msg.value)
         event_name = json_data.get("event_name")
         if event_name in EVENT_HANDLERS:
@@ -40,7 +43,8 @@ async def handle_message(msg):
 
 async def consume():
     consumer = aiokafka.AIOKafkaConsumer(
-        settings.USERS_STREAM_NAME,
+        settings.USERS_STREAM_TOPIC_NAME,
+        settings.USERS_ROLE_CHANGED_TOPIC_NAME,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER,
         group_id=settings.KAFKA_GROUP_ID,
     )

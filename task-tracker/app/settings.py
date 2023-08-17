@@ -10,8 +10,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     KAFKA_BOOTSTRAP_SERVER: str = "localhost:29092"
     KAFKA_GROUP_ID: str = "task-tracker"
-    USERS_STREAM_NAME: str = "users-stream"
-    TASKS_STREAM_NAME: str = "tasks-stream"
+    USERS_STREAM_TOPIC_NAME: str = "users-stream"
+    USERS_ROLE_CHANGED_TOPIC_NAME: str = "users-role-changed"
+    TASKS_STREAM_TOPIC_NAME: str = "tasks-stream"
+    TASKS_FLOW_TOPIC_NAME: str = "tasks-flow"
     TOKEN_URL: str = "http://localhost:8001/token/"
 
     @computed_field

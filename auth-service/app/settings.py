@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     KAFKA_BOOTSTRAP_SERVER: str = "localhost:29092"
     KAFKA_GROUP_ID: str = "auth-service"
-    USERS_STREAM_NAME: str = "users-stream"
+    USERS_STREAM_TOPIC_NAME: str = "users-stream"
+    USERS_ROLE_CHANGED_TOPIC_NAME: str = "users-role-changed"
 
     @computed_field
     @property

@@ -33,10 +33,10 @@ class CreateTaskUseCase(BaseSessionUseCase):
         task_data = TaskSchema.model_validate(task)
 
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_CREATED, task_data
+            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_CREATED, task_data
         )
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_ASSIGNED, task_data
+            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_ASSIGNED, task_data
         )
 
         return task_data
@@ -68,10 +68,10 @@ class CompleteTaskUseCase(BaseSessionUseCase):
         task_data = TaskSchema.model_validate(task)
 
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_UPDATED, task_data
+            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_UPDATED, task_data
         )
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_COMPLETED, task_data
+            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_COMPLETED, task_data
         )
         return task_data
 
@@ -104,10 +104,10 @@ class ShuffleTasksUseCase(BaseSessionUseCase):
         task_data = TaskSchema.model_validate(task)
 
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_UPDATED, task_data
+            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_UPDATED, task_data
         )
         SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_NAME, TaskEvent.TASK_ASSIGNED, task_data
+            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_ASSIGNED, task_data
         )
 
         return task_data

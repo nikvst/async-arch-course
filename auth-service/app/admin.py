@@ -32,17 +32,19 @@ class UserAdmin(ModelView, model=User):
             user_data = UserSchema.model_validate(user)
 
         await SentEventToKafkaUseCase().execute(
-            settings.USERS_STREAM_NAME,
+            settings.USERS_STREAM_TOPIC_NAME,
             UserEvent.USER_CREATED if is_created else UserEvent.USER_UPDATED,
             user_data,
         )
         if self._role_was_changed:
             await SentEventToKafkaUseCase().execute(
-                settings.USERS_STREAM_NAME, UserEvent.USER_ROLE_CHANGED, user_data
+                settings.USERS_ROLE_CHANGED_TOPIC_NAME,
+                UserEvent.USER_ROLE_CHANGED,
+                user_data,
             )
 
     async def after_model_delete(self, model: User) -> None:
         """Единственный способ удалить пользователя - через админку."""
         await SentEventToKafkaUseCase().execute(
-            settings.USERS_STREAM_NAME, UserEvent.USER_DELETED, {"id": model.id}
+            settings.USERS_STREAM_TOPIC_NAME, UserEvent.USER_DELETED, {"id": model.id}
         )

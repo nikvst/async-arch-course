@@ -44,7 +44,7 @@ class CreateUserUseCase(BaseSessionUseCase):
         )
         user_data = UserSchema.model_validate(user)
         await SentEventToKafkaUseCase().execute(
-            settings.USERS_STREAM_NAME, UserEvent.USER_CREATED, user_data
+            settings.USERS_STREAM_TOPIC_NAME, UserEvent.USER_CREATED, user_data
         )
         return user_data
 
@@ -60,6 +60,6 @@ class UpdateUserUseCase(BaseSessionUseCase):
         user = await UserRepository(self.session).update(user, data)
         user_data = UserSchema.model_validate(user)
         await SentEventToKafkaUseCase().execute(
-            settings.USERS_STREAM_NAME, UserEvent.USER_UPDATED, user_data
+            settings.USERS_STREAM_TOPIC_NAME, UserEvent.USER_UPDATED, user_data
         )
         return user_data
