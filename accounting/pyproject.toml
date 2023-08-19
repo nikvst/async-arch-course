@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "auth-service"
+name = "accounting"
 version = "0.1.0"
-description = "UberPopug auth service"
+description = "UberPopug accounting"
 authors = ["Nikita Vstovsky <nikvst@gmail.com>"]
 readme = "README.md"
 
@@ -20,8 +20,11 @@ pydantic-settings = "^2.0.2"
 psycopg2-binary = "^2.9.7"
 asyncpg = "^0.28.0"
 itsdangerous = "^2.1.2"
+confluent-kafka = "^2.2.0"
 aiokafka = "^0.8.1"
+greenlet = "^2.0.2"
 schema-registry = {path = "../schema-registry"}
+rocketry = "^2.5.1"
 
 
 [tool.poetry.group.dev.dependencies]

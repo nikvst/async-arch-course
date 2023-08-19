@@ -2,6 +2,7 @@ version: "3.9"
 
 volumes:
   kafka-data:
+  common-db-volume:
   auth-db-volume:
 
 
@@ -34,64 +35,76 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: true
 
-  auth-postgres:
+  common-postgres:
     image: postgres:alpine
     command: ["postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1"]
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - auth-db-volume:/var/lib/postgresql/data
+      - common-db-volume:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=auth
+      - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  auth-service:
-    build:
-      context: ./auth-service
-      dockerfile: ./Dockerfile
-    ports:
-      - "8001:8000"
-    depends_on:
-      - auth-postgres
-      - kafka
-    environment:
-      - DB_URI=postgresql+asyncpg://postgres:postgres@auth-postgres:5432/auth
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+  # auth-postgres:
+  #   image: postgres:alpine
+  #   command: ["postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1"]
+  #   ports:
+  #     - "5433:5432"
+  #   volumes:
+  #     - auth-db-volume:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=auth
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
 
-  task-tracker-postgres:
-    image: postgres:alpine
-    command: ["postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1"]
-    ports:
-      - "5434:5432"
-    volumes:
-      - task-tracker-db-volume:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=task-tracker
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+  # auth-service:
+  #   build:
+  #     context: ./auth-service
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - "8001:8000"
+  #   depends_on:
+  #     - auth-postgres
+  #     - kafka
+  #   environment:
+  #     - DB_URI=postgresql+asyncpg://postgres:postgres@auth-postgres:5432/auth
+  #     - KAFKA_BOOTSTRAP_SERVER=kafka:9092
 
-  task-tracker-api:
-    build:
-      context: ./task-tracker
-      dockerfile: ./Dockerfile
-    ports:
-      - "8002:8000"
-    depends_on:
-      - task-tracker-postgres
-      - kafka
-    environment:
-      - DB_URI=postgresql+asyncpg://postgres:postgres@task-tracker-postgres:5432/task-tracker
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+  # task-tracker-postgres:
+  #   image: postgres:alpine
+  #   command: ["postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1"]
+  #   ports:
+  #     - "5434:5432"
+  #   volumes:
+  #     - task-tracker-db-volume:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=task-tracker
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
 
-  task-tracker-consumer:
-    build:
-      context: ./task-tracker
-      dockerfile: ./Dockerfile
-    command: ["python", "-m", "app.consumers"]
-    depends_on:
-      - task-tracker-postgres
-      - kafka
-    environment:
-      - DB_URI=postgresql+asyncpg://postgres:postgres@task-tracker-postgres:5432/task-tracker
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+  # task-tracker-api:
+  #   build:
+  #     context: ./task-tracker
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - "8002:8000"
+  #   depends_on:
+  #     - task-tracker-postgres
+  #     - kafka
+  #   environment:
+  #     - DB_URI=postgresql+asyncpg://postgres:postgres@task-tracker-postgres:5432/task-tracker
+  #     - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+
+  # task-tracker-consumer:
+  #   build:
+  #     context: ./task-tracker
+  #     dockerfile: ./Dockerfile
+  #   command: ["python", "-m", "app.consumers"]
+  #   depends_on:
+  #     - task-tracker-postgres
+  #     - kafka
+  #   environment:
+  #     - DB_URI=postgresql+asyncpg://postgres:postgres@task-tracker-postgres:5432/task-tracker
+  #     - KAFKA_BOOTSTRAP_SERVER=kafka:9092

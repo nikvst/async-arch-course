@@ -23,6 +23,7 @@ itsdangerous = "^2.1.2"
 confluent-kafka = "^2.2.0"
 aiokafka = "^0.8.1"
 greenlet = "^2.0.2"
+schema-registry = {path = "../schema-registry"}
 
 
 [tool.poetry.group.dev.dependencies]

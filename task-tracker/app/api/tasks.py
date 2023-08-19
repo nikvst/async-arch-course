@@ -25,7 +25,7 @@ router = APIRouter()
 @router.post("/", response_model=TaskSchema)
 async def create_task(
     data: CreateTaskRequestSchema,
-    user: UserSchema = Depends(get_current_user),
+    _: UserSchema = Depends(get_current_user),
     use_case: CreateTaskUseCase = Depends(CreateTaskUseCase),
 ) -> TaskSchema:
     try:

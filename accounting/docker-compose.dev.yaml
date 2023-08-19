@@ -1,0 +1,17 @@
+version: "3.9"
+
+volumes:
+  db-volume:
+
+services:
+  postgres:
+    image: postgres:alpine
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1"]
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=task-tracker
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

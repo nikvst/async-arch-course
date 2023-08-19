@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import Any, Iterable
 from uuid import UUID
 
-from sqlalchemy import delete, func, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -44,10 +44,6 @@ class UserRepository:
         await self.session.flush()
         return user
 
-    async def delete(self, user_id: UUID):
-        stmt = delete(User).where(User.id == user_id)
-        return await self.session.scalar(stmt)
-
 
 class TaskRepository:
     def __init__(self, session: AsyncSession):
@@ -67,10 +63,10 @@ class TaskRepository:
         stmt = select(Task).options(joinedload(Task.assigned_to))
 
         if user_id:
-            stmt = stmt.where(assigned_to=user_id)
+            stmt = stmt.where(Task.assigned_to_id == user_id)
 
         if completed is not None:
-            stmt = stmt.where(completed=completed)
+            stmt = stmt.where(Task.completed == completed)
 
         result = await self.session.execute(stmt.order_by(Task.created_at.desc()))
         return result.scalars().all()
