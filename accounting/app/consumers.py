@@ -5,13 +5,17 @@ from logging import getLogger
 import aiokafka
 from schema_registry import validate_schema
 
-from app.constants import UserEvent
+from app.constants import TaskEvent, UserEvent
 from app.db import async_session
 from app.settings import settings
+from app.use_cases.tasks import (
+    AssignTaskUseCase,
+    CompleteTaskUseCase,
+    NewTaskCreatedUseCase,
+)
 from app.use_cases.users import (
     CreateUserUseCase,
     UpdateUserUseCase,
-    UserRoleChangedUseCase,
 )
 
 logger = getLogger(__name__)
@@ -19,7 +23,9 @@ logger = getLogger(__name__)
 EVENT_HANDLERS = {
     UserEvent.USER_CREATED.value: {1: CreateUserUseCase},
     UserEvent.USER_UPDATED.value: {1: UpdateUserUseCase},
-    UserEvent.USER_ROLE_CHANGED.value: {1: UserRoleChangedUseCase},
+    TaskEvent.TASK_COMPLETED.value: {2: CompleteTaskUseCase},
+    TaskEvent.TASK_ASSIGNED: {2: AssignTaskUseCase},
+    TaskEvent.TASK_NEW_TASK_CREATED: {2: NewTaskCreatedUseCase},
 }
 
 
@@ -28,7 +34,7 @@ async def handle_message(msg):
 
     if msg.topic in (
         settings.USERS_STREAM_TOPIC_NAME,
-        settings.USERS_ROLE_CHANGED_TOPIC_NAME,
+        settings.TASKS_FLOW_TOPIC_NAME,
     ):
         json_data = json.loads(msg.value)
         event_name = json_data.get("event_name")
@@ -55,7 +61,7 @@ async def handle_message(msg):
 async def consume():
     consumer = aiokafka.AIOKafkaConsumer(
         settings.USERS_STREAM_TOPIC_NAME,
-        settings.USERS_ROLE_CHANGED_TOPIC_NAME,
+        settings.TASKS_FLOW_TOPIC_NAME,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER,
         group_id=settings.KAFKA_GROUP_ID,
     )

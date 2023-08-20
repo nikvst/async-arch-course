@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.constants import Role
 
@@ -33,3 +33,20 @@ class UpdateUserRequestSchema(BaseModel):
     username: str | None = None
     email: EmailStr | None = None
     password: str | None = None
+
+
+class UserCUEventSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    public_id: UUID = Field(alias="id")
+    username: str
+    email: str
+    role: Role
+    is_active: bool
+
+
+class UserRoleChangedEventSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    public_id: UUID = Field(alias="id")
+    role: Role

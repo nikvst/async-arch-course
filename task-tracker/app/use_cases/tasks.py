@@ -12,8 +12,11 @@ from app.models import Task, User
 from app.repositories import TaskRepository, UserRepository
 from app.schemas import (
     CreateTaskRequestSchema,
+    TaskAssignedEventSchema,
+    TaskCompletedEventSchema,
+    TaskCUEventSchema,
     TaskSchema,
-    UserSchema,
+    UserSchema, NewTaskCreatedEventSchema,
 )
 from app.settings import settings
 from app.use_cases._base import BaseSessionUseCase
@@ -30,15 +33,20 @@ class CreateTaskUseCase(BaseSessionUseCase):
             assigned_to=await self._get_user(),
         )
 
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_STREAM_TOPIC_NAME,
+            TaskEvent.TASK_CREATED,
+            2,
+            TaskCUEventSchema.model_validate(task),
+        )
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_FLOW_TOPIC_NAME,
+            TaskEvent.TASK_NEW_TASK_CREATED,
+            2,
+            NewTaskCreatedEventSchema.model_validate(task),
+        )
+
         task_data = TaskSchema.model_validate(task)
-
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_CREATED, task_data
-        )
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_ASSIGNED, task_data
-        )
-
         return task_data
 
     def _get_cost(self) -> Decimal:
@@ -65,22 +73,29 @@ class CompleteTaskUseCase(BaseSessionUseCase):
 
         task = await TaskRepository(self.session).update(task=task, completed=True)
 
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_STREAM_TOPIC_NAME,
+            TaskEvent.TASK_UPDATED,
+            2,
+            TaskCUEventSchema.model_validate(task),
+        )
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_FLOW_TOPIC_NAME,
+            TaskEvent.TASK_COMPLETED,
+            2,
+            TaskCompletedEventSchema.model_validate(task),
+        )
+
         task_data = TaskSchema.model_validate(task)
 
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_UPDATED, task_data
-        )
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_COMPLETED, task_data
-        )
         return task_data
 
 
 class ShuffleTasksUseCase(BaseSessionUseCase):
-    async def execute(self, user: UserSchema | None = None) -> list[TaskSchema]:
+    async def execute(self, user_id: UUID | None = None) -> list[TaskSchema]:
         tasks = await TaskRepository(self.session).get_all(
             completed=False,
-            user_id=user and user.id,
+            user_id=user_id,
         )
 
         tasks_data = []
@@ -101,14 +116,20 @@ class ShuffleTasksUseCase(BaseSessionUseCase):
             task, assigned_to=await self._get_user()
         )
 
-        task_data = TaskSchema.model_validate(task)
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_STREAM_TOPIC_NAME,
+            TaskEvent.TASK_UPDATED,
+            2,
+            TaskCUEventSchema.model_validate(task),
+        )
+        await SentEventToKafkaUseCase().execute(
+            settings.TASKS_FLOW_TOPIC_NAME,
+            TaskEvent.TASK_ASSIGNED,
+            2,
+            TaskAssignedEventSchema.model_validate(task),
+        )
 
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_STREAM_TOPIC_NAME, TaskEvent.TASK_UPDATED, task_data
-        )
-        SentEventToKafkaUseCase().execute(
-            settings.TASKS_FLOW_TOPIC_NAME, TaskEvent.TASK_ASSIGNED, task_data
-        )
+        task_data = TaskSchema.model_validate(task)
 
         return task_data
 

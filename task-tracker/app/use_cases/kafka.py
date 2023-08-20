@@ -1,27 +1,45 @@
 import json
+import uuid
+from datetime import datetime
 
 import aiokafka
 from pydantic import BaseModel
+from schema_registry import validate_schema
 
+from app.constants import TaskEvent
 from app.settings import settings
 
 
 class SentEventToKafkaUseCase:
-    def execute(self, topic_name: str, event_name: str, data: dict | BaseModel) -> None:
+    async def execute(
+        self,
+        topic_name: str,
+        event_name: TaskEvent,
+        version: int,
+        data: dict | BaseModel,
+    ) -> None:
         if isinstance(data, BaseModel):
             data = data.model_dump(mode="json")
+
         event_data = {
-            "event_name": event_name,
+            "event_id": str(uuid.uuid4()),
+            "event_version": version,
+            "event_time": datetime.now().isoformat(),
+            "producer": settings.SERVICE_NAME,
+            "event_name": event_name.value,
             "data": data,
         }
-        event_data_encoded = json.dumps(event_data).encode("utf-8")
+
+        validate_schema(event_data, event_name, version)
 
         producer = aiokafka.AIOKafkaProducer(
-            bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER,
-            client_id=settings.KAFKA_CLIENT_ID,
+            bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER
         )
         await producer.start()
         try:
-            await producer.send_and_wait(topic_name, event_data_encoded)
+            await producer.send_and_wait(
+                topic_name,
+                json.dumps(event_data).encode("utf-8"),
+            )
         finally:
             await producer.stop()

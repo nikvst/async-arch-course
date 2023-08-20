@@ -3,7 +3,7 @@ from sqladmin import ModelView
 from app.constants import UserEvent
 from app.models import User
 from app.repositories import UserRepository
-from app.schemas import UserSchema
+from app.schemas import UserCUEventSchema, UserRoleChangedEventSchema
 from app.settings import settings
 from app.use_cases.kafka import SentEventToKafkaUseCase
 from app.utils import get_password_hash
@@ -12,6 +12,7 @@ from app.utils import get_password_hash
 class UserAdmin(ModelView, model=User):
     column_list = [User.id, User.username, User.email, User.is_active]
     is_async = True
+    can_delete = False
 
     async def on_model_change(self, data: dict, model: User, is_created: bool) -> None:
         self._role_was_changed = False
@@ -29,22 +30,17 @@ class UserAdmin(ModelView, model=User):
         """
         async with self.session_maker(expire_on_commit=False) as session:
             user = await UserRepository(session).get_by_id(model.id)
-            user_data = UserSchema.model_validate(user)
 
         await SentEventToKafkaUseCase().execute(
             settings.USERS_STREAM_TOPIC_NAME,
             UserEvent.USER_CREATED if is_created else UserEvent.USER_UPDATED,
-            user_data,
+            1,
+            UserCUEventSchema.model_validate(user),
         )
         if self._role_was_changed:
             await SentEventToKafkaUseCase().execute(
                 settings.USERS_ROLE_CHANGED_TOPIC_NAME,
                 UserEvent.USER_ROLE_CHANGED,
-                user_data,
+                1,
+                UserRoleChangedEventSchema.model_validate(user),
             )
-
-    async def after_model_delete(self, model: User) -> None:
-        """Единственный способ удалить пользователя - через админку."""
-        await SentEventToKafkaUseCase().execute(
-            settings.USERS_STREAM_TOPIC_NAME, UserEvent.USER_DELETED, {"id": model.id}
-        )

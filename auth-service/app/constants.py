@@ -9,7 +9,6 @@ class Role(str, enum.Enum):
 
 
 class UserEvent(str, enum.Enum):
-    USER_CREATED = "UserCreated"
-    USER_UPDATED = "UserUpdated"
-    USER_DELETED = "UserDeleted"
-    USER_ROLE_CHANGED = "UserRoleChanged"
+    USER_CREATED = "Users.Created"
+    USER_UPDATED = "Users.Updated"
+    USER_ROLE_CHANGED = "Users.RoleChanged"

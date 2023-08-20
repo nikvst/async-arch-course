@@ -5,17 +5,14 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.constants import Role
 from app.db import get_session
 from app.exceptions import UserNotFoundError
-from app.repositories import UserRepository
+from app.repositories import AccountRepository, UserRepository
 from app.schemas import (
-    UserRoleChangedEventSchema,
     UserSchema,
 )
 from app.settings import settings
 from app.use_cases._base import BaseSessionUseCase
-from app.use_cases.tasks import ShuffleTasksUseCase
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=settings.TOKEN_URL)
 
@@ -39,7 +36,8 @@ async def get_current_user(
 class CreateUserUseCase(BaseSessionUseCase):
     async def execute(self, user_event_data: dict) -> None:
         user_data = UserSchema.model_validate(user_event_data)
-        await UserRepository(self.session).create(user_data)
+        user = await UserRepository(self.session).create(user_data)
+        await AccountRepository(self.session).create(user)
 
 
 class UpdateUserUseCase(BaseSessionUseCase):
@@ -49,13 +47,5 @@ class UpdateUserUseCase(BaseSessionUseCase):
         if user:
             await UserRepository(self.session).update(user, user_data)
         else:
-            await UserRepository(self.session).create(user_data)
-
-
-class UserRoleChangedUseCase(BaseSessionUseCase):
-    async def execute(self, user_event_data: dict) -> None:
-        user_data = UserRoleChangedEventSchema.model_validate(user_event_data)
-        if user_data.role not in (Role.ADMIN, Role.MANAGER):
-            return
-
-        await ShuffleTasksUseCase(self.session).execute(user_data.public_id)
+            user = await UserRepository(self.session).create(user_data)
+            await AccountRepository(self.session).create(user)
