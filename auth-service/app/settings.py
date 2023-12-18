@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     KAFKA_GROUP_ID: str = "auth-service"
     USERS_STREAM_TOPIC_NAME: str = "users-stream"
     USERS_ROLE_CHANGED_TOPIC_NAME: str = "users-role-changed"
+    SERVICE_NAME: str = "auth-service"
 
     @computed_field
     @property
